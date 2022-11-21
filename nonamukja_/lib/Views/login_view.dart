@@ -23,34 +23,9 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextFormField(
-                  onSaved: (val) {},
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return '이메일을 입력해주세요.';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "이메일",
-                      hintStyle: TextStyle(color: Colors.grey[400])),
-                ),
-                TextFormField(
-                  onSaved: (val) {},
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return '비밀번호를 입력해주세요.';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "비밀번호",
-                      hintStyle: TextStyle(color: Colors.grey[400])),
-                ),
-                Form(
-                  child: ElevatedButton(
+                EmailTextFormField(), // 이메일 입력창
+                PasswordTextFormField(), // 비밀번호 입력창
+                ElevatedButton(
                     child: const Text('로그인'),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -58,12 +33,47 @@ class _LoginViewState extends State<LoginView> {
                       }
                     },
                   ),
-                )
+                TextButton(
+                  child: Text("회원가입"),
+                  onPressed: null,
+                ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  TextFormField EmailTextFormField(){ // 이메일 입력필드
+    return TextFormField(
+      onSaved: (val) {},
+      validator: (val) {
+        if (val == null || val.isEmpty) {
+          return '이메일을 입력해주세요.';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "이메일",
+          hintStyle: TextStyle(color: Colors.grey[400])),
+    );
+  }
+
+  TextFormField PasswordTextFormField(){ // 비밀번호 입력필드
+    return TextFormField(
+      onSaved: (val) {},
+      validator: (val) {
+        if (val == null || val.isEmpty) {
+          return '비밀번호를 입력해주세요.';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "비밀번호",
+          hintStyle: TextStyle(color: Colors.grey[400])),
     );
   }
 }
