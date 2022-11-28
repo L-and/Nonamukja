@@ -12,8 +12,9 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  String email = '';
-  var password = '';
+  var email;
+  var tmpPassword;
+  var passwordHash;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       onPressed: () {
         if (_formKey.currentState!.validate()) {
           print(email);
-          print(password);
+          print(passwordHash);
         }
       },
     );
@@ -96,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(passwordValidation(val)){
-          password = val;
+          tmpPassword = val; // 비밀번호 임시저장
         }
         else{
           return '대소문자,숫자,특수문자 포함 8글자이상으로 입력해주세요.';
@@ -118,8 +119,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           return '비밀번호를 다시한번 입력해주세요.';
         }
 
-        if(passwordValidation(val) && passwordCheckValidation(val)){
-
+        if(passwordCheckValidation(val)){
+          passwordHash = sha256.convert(utf8.encode(val)).toString(); // 비밀번호를 해쉬값으로 저장
         }
         else{
           return '입력한 비밀번호와 일치하지 않습니다.';
@@ -158,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 // 비밀번호입력 검사 Validator
   bool passwordCheckValidation(String password) {
-    if (password == this.password) {
+    if (password == this.tmpPassword) {
       return true;
     }
     else {
