@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:nonamukja/provider/provider_user.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -12,9 +14,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  var email;
   var tmpPassword;
-  var passwordHash;
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 EmailTextFormField(), // 이메일 입력창
                 PasswordTextFormField(), // 비밀번호 입력창
                 PasswordCheckTextFormField(), // 비밀번호 확인 입력창
-                TextFormField(
-                  onSaved: (val) {},
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return '닉네임을 입력해주세요.';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "닉네임",
-                      hintStyle: TextStyle(color: Colors.grey[400])),
-                ),
+                NicknameTextFormField(),
                 renderSubmitButton() // 회원가입버튼 렌더링
               ],
             ),
@@ -57,10 +45,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: const Text('회원가입'),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          print(email);
-          print(passwordHash);
+          UserProvider().registerPostRequest();
         }
       },
+    );
+  }
+
+  TextFormField NicknameTextFormField() {
+    return TextFormField(
+      onSaved: (val) {},
+      validator: (val) {
+        if (val == null || val.isEmpty) {
+          return '닉네임을 입력해주세요.';
+        }
+        else {
+          UserProvider().nickname = val;
+        }
+      },
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "닉네임",
+          hintStyle: TextStyle(color: Colors.grey[400])),
     );
   }
 
@@ -73,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(emailValidation(val)){
-          email = val;
+           UserProvider().email = val;
         }
         else{
           return '이메일을 다시 입력해주세요.';
@@ -120,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(passwordCheckValidation(val)){
-          passwordHash = sha256.convert(utf8.encode(val)).toString(); // 비밀번호를 해쉬값으로 저장
+          UserProvider().password = sha256.convert(utf8.encode(val)).toString(); // 비밀번호를 해쉬값으로 저장
         }
         else{
           return '입력한 비밀번호와 일치하지 않습니다.';

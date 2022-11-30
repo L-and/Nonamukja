@@ -29,9 +29,9 @@ class HomeTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                  'test_image.webp',
-              width: ,),
+              // Image.asset(
+              //     'test_image.webp',
+              // width: ,),
               Text(// 글제목
                 '맘스터치 먹을사람~',
               style: TextStyle(fontSize: 18)),
