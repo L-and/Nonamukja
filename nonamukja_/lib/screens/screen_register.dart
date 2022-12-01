@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
+import 'package:nonamukja/models/auth.dart';
 import 'package:nonamukja/provider/provider_user.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,6 +14,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  UserProvider userProvider = new UserProvider(); // 데이터관리를 위한 프로바이더 변수
 
   var tmpPassword;
 
@@ -45,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: const Text('회원가입'),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          UserProvider().registerPostRequest();
+          userProvider.registerPostRequest();
         }
       },
     );
@@ -59,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           return '닉네임을 입력해주세요.';
         }
         else {
-          UserProvider().nickname = val;
+          userProvider.nickname = val;
         }
       },
       decoration: InputDecoration(
@@ -78,7 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(emailValidation(val)){
-           UserProvider().email = val;
+           userProvider.email = val;
         }
         else{
           return '이메일을 다시 입력해주세요.';
@@ -125,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(passwordCheckValidation(val)){
-          UserProvider().password = sha256.convert(utf8.encode(val)).toString(); // 비밀번호를 해쉬값으로 저장
+          userProvider.password = sha256.convert(utf8.encode(val)).toString(); // 비밀번호를 해쉬값으로 저장
         }
         else{
           return '입력한 비밀번호와 일치하지 않습니다.';

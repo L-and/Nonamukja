@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class UserProvider extends ChangeNotifier {
+class UserModel {
   String _email = "";
   String _password = "";
   String _nickname = "";
@@ -12,20 +12,17 @@ class UserProvider extends ChangeNotifier {
 
   set email(String input_email) {
     _email = input_email;
-    notifyListeners();
   }
 
   set password(String input_password) {
     _password = input_password;
-    notifyListeners();
   }
 
   set nickname(String input_nickname) {
     _nickname = input_nickname;
-    notifyListeners();
   }
 
-  Future<int> registerPostRequest() async { // 회원가입 POST 요청
+  void registerPostRequest() async { // 회원가입 POST 요청
     Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/signup'); // 회원가입 POST 요청 주소
 
     Map<String, String> registerJson = {
@@ -34,13 +31,12 @@ class UserProvider extends ChangeNotifier {
       'nickname': _nickname
     };
 
+    print(registerJson);
+
     http.Response response = await http.post(
       url,
       body: registerJson,
     );
 
-    print(response.statusCode);
-
-    return response.statusCode;
   }
 }
