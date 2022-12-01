@@ -22,34 +22,42 @@ class HomeTab extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
         vertical: 5.0, // 마진 5px
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image.asset(
-              //     'test_image.webp',
-              // width: ,),
-              Text(// 글제목
-                '맘스터치 먹을사람~',
-              style: TextStyle(fontSize: 18)),
-              Text(// 가게이름
-                  '맘스터치',
-                  style: TextStyle(fontSize: 18)),
-              Text(// 인원정보
-                  '1/4명',
-                  style: TextStyle(fontSize: 18)),
-              Text(// 채팅개수
-                  '4',
-                  style: TextStyle(fontSize: 18))
-            ],
-          )
-        ],
-      ),
-
+      child: PostWidget('맘스터치 먹을사람~', '맘스터치', 1, 4, 4),
     );
   }
 
+  Row PostWidget(String title, String restaurantName, int currentPeopleCount, int maxPeopleCount, int chatCount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+          ),
+          child:
+          Image.asset(
+            'test_image.webp',
+            width: 100,),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(// 글제목
+                title,
+                style: TextStyle(fontSize: 18)),
+            Text(// 가게이름
+                restaurantName,
+                style: TextStyle(fontSize: 15)),
+            Text(// 인원정보
+                currentPeopleCount.toString() + "/" + maxPeopleCount.toString() + "명",
+                style: TextStyle(fontSize: 15)),
+            Text(// 채팅개수
+                chatCount.toString(),
+                style: TextStyle(fontSize: 15))
+          ],
+        )
+      ],
+    );
+  }
 }
