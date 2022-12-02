@@ -48,7 +48,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: const Text('회원가입'),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          userProvider.registerPostRequest();
+          Future<int> status = userProvider.registerPostRequest();
+
+          status.then((val) {
+            String message = "가입되었습니다!";
+
+            if(val == 400) {
+              message = "이미 가입되어있는 이메일입니다.";
+            }
+            print(val);
+              showDialog(
+                  context: context,
+                  barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Text(message),
+                      insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                      actions: [
+                        TextButton(
+                          child: const Text('확인'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  }
+              );
+            }).catchError((error) {
+
+            });
         }
       },
     );

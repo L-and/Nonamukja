@@ -39,8 +39,6 @@ class UserProvider extends ChangeNotifier {
       body: registerJson,
     );
 
-    print(response.statusCode);
-
     return response.statusCode;
   }
 }
