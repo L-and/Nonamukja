@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:provider/provider.dart';
-import 'package:nonamukja/models/auth.dart';
 import 'package:nonamukja/provider/provider_user.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -157,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(passwordCheckValidation(val)){
-          userProvider.password = sha256.convert(utf8.encode(val)).toString(); // 비밀번호를 해쉬값으로 저장
+          userProvider.password = val; // 비밀번호를 해쉬값으로 저장
         }
         else{
           return '입력한 비밀번호와 일치하지 않습니다.';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screen_register.dart';
+import 'package:nonamukja/provider/provider_auth.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +12,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  AuthProvider authProvider = new AuthProvider(); // 인증 프로바이더 변수
+  
   String email = '';
   String password = '';
 
@@ -50,9 +53,20 @@ class _LoginScreenState extends State<LoginScreen> {
       child: const Text('로그인'),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          print(email);
-          print(password);
-          Navigator.of(context).pushReplacementNamed('/index'); // 메인화면으로 이동
+          Future<http.Response> response = authProvider.authRequest();
+
+          response.then((val) {
+            if(val.statusCode == 201) {
+              print("로그인 성공");
+              print(val.body);
+            } else if(val.statusCode >= 400) {
+              print("로그인 실패");
+            }
+          }).catchError((error) {
+            print(error);
+          });
+
+          //Navigator.of(context).pushReplacementNamed('/index'); // 메인화면으로 이동
         }
       },
     );
@@ -67,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         if(emailValidation(val)){
-          email = val;
+          authProvider.email = val;
         }
         else{
           return '이메일을 다시 입력해주세요.';
@@ -91,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         if(passwordValidation(val)){
-          password = val;
+          authProvider.password = val;
         }
         else{
           return '대소문자,숫자,특수문자 포함 8글자이상으로 입력해주세요.';
