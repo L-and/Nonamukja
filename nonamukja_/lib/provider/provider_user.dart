@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterProvider extends ChangeNotifier {
+class UserProvider extends ChangeNotifier {
   String _email = "";
   String _password = "";
   String _nickname = "";
@@ -26,7 +26,7 @@ class RegisterProvider extends ChangeNotifier {
   }
 
   Future<int> registerPostRequest() async { // 회원가입 POST 요청
-    Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/signup/'); // 회원가입 POST 요청 주소
+    Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/signup'); // 회원가입 POST 요청 주소
 
     Map<String, String> registerJson = {
       'email': _email,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:nonamukja/provider/provider_user.dart';
+import 'package:nonamukja/provider/provider_register.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  UserProvider userProvider = new UserProvider(); // 데이터관리를 위한 프로바이더 변수
+  RegisterProvider userProvider = new RegisterProvider(); // 데이터관리를 위한 프로바이더 변수
 
   var tmpPassword;
 
@@ -49,12 +49,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Future<int> status = userProvider.registerPostRequest();
 
           status.then((val) {
-            String message = "가입되었습니다!";
+            String message = "서버에 에러가 발생했습니다!";
 
-            if(val == 400) {
+            if(val ~/100 == 2) { // 코드 2XX
+              message = "가입되었습니다!";
+            }
+            else if(val ~/100 == 4) { // 코드 4XX
               message = "이미 가입되어있는 이메일입니다.";
             }
-            print(val);
+            message += val.toString();
+            print(val); // status code 출력
               showDialog(
                   context: context,
                   barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
