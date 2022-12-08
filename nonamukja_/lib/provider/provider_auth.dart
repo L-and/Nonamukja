@@ -21,14 +21,14 @@ class AuthProvider extends ChangeNotifier {
   Future<http.Response> authRequest() async { // 회원가입 POST 요청
     Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/token/'); // 토큰 POST 요청 주소
 
-    Map<String, String> registerJson = {
+    Map<String, String> loginJson = {
       'email': _email,
       'password': _password,
     };
 
     http.Response response = await http.post(
-      url,
-      body: registerJson,
+        url,
+        body: loginJson
     );
 
     return response;
