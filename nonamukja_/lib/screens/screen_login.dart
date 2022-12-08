@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nonamukja/provider/provider_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -48,17 +51,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // 로그인버튼
   renderSubmitButton() {
     return ElevatedButton(
       child: const Text('로그인'),
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          Future<http.Response> response = authProvider.authRequest();
+          Future<http.Response> response = authProvider.authRequest(); // 로그인 인증요청을 받을 변수
 
-          response.then((val) {
-            if(val.statusCode == 201) {
+          final prefs = await SharedPreferences.getInstance(); // 로컬데이터 저장을 위한 변수
+
+          response.then((val) { // 로그인 인증요청이 됐다면
+            print("[Login]StatusCode: "+val.statusCode.toString()); // 요청에 대한 상태코드
+            print("Lastest Token: "+ prefs.getStringList('KeyList').toString()); // 마지막으로 로컬로 저장된 토큰값
+
+            if(val.statusCode == 200) {
               print("로그인 성공");
-              print(val.body);
+
+              Map<String, String> authResponse = new Map<String, String>.from(jsonDecode(val.body)); // 요청에대한Json을 Map형식으로 변환해서 저장
+              print(authResponse);
+
+              prefs.setStringList('KeyList', authResponse.values.toList()); //
             } else if(val.statusCode >= 400) {
               print("로그인 실패");
             }
