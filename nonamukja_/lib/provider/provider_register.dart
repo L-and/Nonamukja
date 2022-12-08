@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class UserProvider extends ChangeNotifier {
+class RegisterProvider extends ChangeNotifier {
   String _email = "";
   String _password = "";
   String _nickname = "";
