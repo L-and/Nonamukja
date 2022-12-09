@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterProvider extends ChangeNotifier {
+class Register {
+  // 싱글톤패턴을 위한 코드
+  Register._privateConstructor(); // Private 생성자 생성
+  // 생성자를 호출하고 _instance 변수에 할당
+  static final Register _instance = Register._privateConstructor();
+
+  // 호출시에 _instance 변수를 반환
+  factory Register() {
+    return _instance;
+  }
+
   String _email = "";
   String _password = "";
   String _nickname = "";
@@ -12,17 +22,14 @@ class RegisterProvider extends ChangeNotifier {
 
   set email(String input_email) {
     _email = input_email;
-    notifyListeners();
   }
 
   set password(String input_password) {
     _password = input_password;
-    notifyListeners();
   }
 
   set nickname(String input_nickname) {
     _nickname = input_nickname;
-    notifyListeners();
   }
 
   Future<int> registerPostRequest() async { // 회원가입 POST 요청
