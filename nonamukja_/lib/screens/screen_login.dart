@@ -57,13 +57,15 @@ class _LoginScreenState extends State<LoginScreen> {
       child: const Text('로그인'),
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
+
+          String keyName = 'TokenList';
           Future<http.Response> response = authProvider.authRequest(); // 로그인 인증요청을 받을 변수
 
           final prefs = await SharedPreferences.getInstance(); // 로컬데이터 저장을 위한 변수
 
           response.then((val) { // 로그인 인증요청이 됐다면
             print("[Login]StatusCode: "+val.statusCode.toString()); // 요청에 대한 상태코드
-            print("Lastest Token: "+ prefs.getStringList('KeyList').toString()); // 마지막으로 로컬로 저장된 토큰값
+            print("Lastest Token: "+ prefs.getStringList(keyName).toString()); // 마지막으로 로컬로 저장된 토큰값
 
             if(val.statusCode == 200) {
               print("로그인 성공");
@@ -71,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Map<String, String> authResponse = new Map<String, String>.from(jsonDecode(val.body)); // 요청에대한Json을 Map형식으로 변환해서 저장
               print(authResponse);
 
-              prefs.setStringList('KeyList', authResponse.values.toList()); //
+              prefs.setStringList(keyName, authResponse.values.toList()); // 로컬에 토큰리스트를 저장
             } else if(val.statusCode >= 400) {
               print("로그인 실패");
             }
@@ -79,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
             print(error);
           });
 
-          //Navigator.of(context).pushReplacementNamed('/index'); // 메인화면으로 이동
+          Navigator.of(context).pushReplacementNamed('/index'); // 메인화면으로 이동
         }
       },
     );
