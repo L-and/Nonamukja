@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:nonamukja/singleton_class/auth.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,24 +13,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Future<bool> tokenValidCheck() async { // 로컬에 저장된 토큰을 받아와 유효성을 검사 후 유효하면 로그인, 유효하지않으면 refreshToken으로 토큰 재발급
-    String validateUrl = '';
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? tokenList = prefs.getStringList('TokenList'); // 로컬에 저장된토큰갑 가져오기
-
-    http.Response response = await http.Request
-
-
-    return isLogin;
-  }
 
   void moveScreen() async {
-    await tokenValidCheck().then((isLogin) {
-      if (isLogin) {
+    await Auth().tokenVerifyRequest().then((response) {
+      if (response.statusCode ~/100 == 2) { // 상태코드 2XX > 로그인 성공
         Navigator.of(context).pushReplacementNamed('/index');
+        print('[screen_splash]토큰이 유효함! 로그인성공!');
       } else {
         Navigator.of(context).pushReplacementNamed('/login');
+        print('[screen_splash]토큰이 만료됨, 로그인실패..');
       }
     });
   }
