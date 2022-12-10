@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:nonamukja/provider/provider_auth.dart';
+import 'package:nonamukja/singleton_class/auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,8 +15,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  AuthProvider authProvider = new AuthProvider(); // 인증 프로바이더 변수
-  
   String email = '';
   String password = '';
 
@@ -59,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (_formKey.currentState!.validate()) {
 
           String keyName = 'TokenList';
-          Future<http.Response> response = authProvider.authRequest(); // 로그인 인증요청을 받을 변수
+          Future<http.Response> response = Auth().loginRequest(); // 로그인 인증요청을 받을 변수
 
           final prefs = await SharedPreferences.getInstance(); // 로컬데이터 저장을 위한 변수
 
@@ -96,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         if(emailValidation(val)){
-          authProvider.email = val;
+          Auth().email = val;
         }
         else{
           return '이메일을 다시 입력해주세요.';
@@ -120,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         if(passwordValidation(val)){
-          authProvider.password = val;
+          Auth().password = val;
         }
         else{
           return '대소문자,숫자,특수문자 포함 8글자이상으로 입력해주세요.';

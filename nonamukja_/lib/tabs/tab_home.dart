@@ -23,7 +23,7 @@ class HomeTab extends StatelessWidget {
           height: 128,
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           alignment: Alignment.center,
-          child: Image.asset('/test_image.webp'),
+          child: CircleAvatar(),
         ),
       ),
       title: const Text('맘스터치 먹을사람~'),

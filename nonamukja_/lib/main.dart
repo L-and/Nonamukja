@@ -6,8 +6,6 @@ import 'screens/screen_splash.dart';
 import 'screens/screen_index.dart';
 import 'screens/screen_search.dart';
 import 'screens/screen_post.dart';
-import 'provider/provider_register.dart';
-
 
 void main() {
   runApp(MyApp());

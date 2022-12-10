@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:nonamukja/provider/provider_register.dart';
+import 'package:nonamukja/singleton_class/register.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -12,8 +12,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  RegisterProvider userProvider = new RegisterProvider(); // 데이터관리를 위한 프로바이더 변수
 
   var tmpPassword;
 
@@ -46,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: const Text('회원가입'),
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          Future<int> status = userProvider.registerPostRequest();
+          Future<int> status = Register().registerPostRequest();
 
           status.then((val) {
             String message = "서버에 에러가 발생했습니다!";
@@ -93,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           return '닉네임을 입력해주세요.';
         }
         else {
-          userProvider.nickname = val;
+          Register().nickname = val;
         }
       },
       decoration: InputDecoration(
@@ -112,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(emailValidation(val)){
-           userProvider.email = val;
+           Register().email = val;
         }
         else{
           return '이메일을 다시 입력해주세요.';
@@ -159,7 +157,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         if(passwordCheckValidation(val)){
-          userProvider.password = val; // 비밀번호를 해쉬값으로 저장
+          Register().password = val; // 비밀번호를 해쉬값으로 저장
         }
         else{
           return '입력한 비밀번호와 일치하지 않습니다.';
