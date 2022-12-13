@@ -58,4 +58,21 @@ class Auth {
 
     return response;
   }
+
+  Future<http.Response> tokenRefreshRequest() async { // 토큰 재발급 요청
+    final prefs = await SharedPreferences.getInstance(); // 로컬데이터 사용을 위한 변수
+
+    Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/token/verify/'); // 토큰 재발급 주소
+
+    Map<String, String?> tokenJson = {
+      'refresh': prefs.getStringList('TokenList')?[1]
+    };
+
+    http.Response response = await http.post(
+        url,
+        body: tokenJson
+    );
+
+    return response;
+  }
 }
