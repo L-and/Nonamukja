@@ -14,16 +14,18 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  void moveScreen() async {
-    // 로그인 시도
+  void tokenVerifyCheck() async { // 토큰 유효성검사 후 로그인시도
+
+
     await Auth().tokenVerifyRequest().then((response) { // 저장된 토큰으로 로그인 시도
       if (response.statusCode ~/100 == 2) { // 상태코드 2XX > 로그인 성공
         Navigator.of(context).pushReplacementNamed('/index');
         print('[screen_splash]토큰이 유효함! 로그인성공!');
       } else { // 나머지 상태코드 > 로그인 실패
-        Navigator.of(context).pushReplacementNamed('/login');
         print('[screen_splash]토큰이 만료됨, 토큰 재발급 시도..');
       }
+    }).catchError((error) {
+      print('[screen_splash]에러발생.. 토큰 재발급 시도..');
     });
 
     // 토큰 재발급 시도
@@ -35,6 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.of(context).pushReplacementNamed('/login');
         print('[screen_splash]재발급토큰이 만료됨, 로그인 실패..');
       }
+    }).catchError((error) {
+      Navigator.of(context).pushReplacementNamed('/login');
+      print('[screen_splash]에러발생.. 로그인창으로 이동');
     });
   }
 
@@ -42,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(milliseconds: 1500), () {
-      moveScreen();
+      tokenVerifyCheck();
     });
   }
 

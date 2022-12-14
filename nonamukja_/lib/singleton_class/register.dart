@@ -33,7 +33,7 @@ class Register {
   }
 
   Future<int> registerPostRequest() async { // 회원가입 POST 요청
-    Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/signup'); // 회원가입 POST 요청 주소
+    Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/signup/'); // 회원가입 POST 요청 주소
 
     Map<String, String> registerJson = {
       'email': _email,

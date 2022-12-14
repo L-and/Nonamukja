@@ -72,14 +72,14 @@ class _LoginScreenState extends State<LoginScreen> {
               print(authResponse);
 
               prefs.setStringList(keyName, authResponse.values.toList()); // 로컬에 토큰리스트를 저장
+
+              Navigator.of(context).pushReplacementNamed('/index'); // 메인화면으로 이동
             } else if(val.statusCode >= 400) {
               print("로그인 실패");
             }
           }).catchError((error) {
             print(error);
           });
-
-          Navigator.of(context).pushReplacementNamed('/index'); // 메인화면으로 이동
         }
       },
     );
