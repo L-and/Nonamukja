@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:nonamukja/singleton_class/post.dart';
 
 class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Post().postListRequest(); // 게시글목록 가져오기
     return ListView.builder(
       scrollDirection: Axis.vertical,
       padding: const EdgeInsets.all(8),
