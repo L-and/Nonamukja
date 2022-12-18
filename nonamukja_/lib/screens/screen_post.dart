@@ -1,55 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:nonamukja/singleton_class/post.dart';
+
+class PostScreenArguments {
+  final int index;
+
+  PostScreenArguments({required this.index});
+}
 
 class PostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: PostBody(context),
+
+    final args = ModalRoute.of(context)!.settings.arguments as PostScreenArguments;
+
+    return Scaffold(
+      body: PostScrollView(args.index),
     );
   }
 }
 
-Widget PostBody(context) {
+Widget PostScrollView(int index) {
+  Post post = Post(); // 포스트 불러오기
+
   return CustomScrollView(
     slivers: <Widget>[
-      const SliverAppBar(
+      SliverAppBar( // 게시글 이미지
         pinned: true,
         expandedHeight: 250.0,
-        flexibleSpace: FlexibleSpaceBar(
-          title: Text('Demo'),
+        flexibleSpace: Stack(
+          children: <Widget>[
+            Positioned.fill(
+                child: Image.network(
+                  'http://think2022.iptime.org:9900' + post.postModelList[index].photo,
+                  fit: BoxFit.cover,
+                )),
+          ],
         ),
       ),
-      SliverGrid(
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200.0,
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: 4.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-            return Container(
-              alignment: Alignment.center,
-              color: Colors.teal[100 * (index % 9)],
-              child: Text('Grid Item $index'),
-            );
-          },
-          childCount: 20,
-        ),
+      SliverToBoxAdapter( // 게시글 본문
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(post.postModelList[index].title,  // 제목
+              style: TextStyle(
+                fontSize: 60,
+              ),
+            ),
+            Text(post.postModelList[index].writer['nickname']!,  // 닉네임
+              style: TextStyle(
+                fontSize: 25,
+              ),
+            ),
+            Text(post.postModelList[index].content,  // 내용
+              style: TextStyle(
+                fontSize: 25,
+              ),
+            ),
+          ],
+        )
       ),
-      SliverFixedExtentList(
-        itemExtent: 50.0,
-        delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-            return Container(
-              alignment: Alignment.center,
-              color: Colors.lightBlue[100 * (index % 9)],
-              child: Text('List Item $index'),
-            );
-          },
-        ),
-      ),
-      BottomBar(),
     ],
   );
 }
