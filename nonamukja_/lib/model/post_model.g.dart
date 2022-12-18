@@ -7,6 +7,7 @@ part of 'post_model.dart';
 // **************************************************************************
 
 PostModel _$PostModelFromJson(Map<String, dynamic> json) {
+  if(json['photo'] == null) json['photo'] = "/media/default.png/";
   return PostModel(
     json['pk'] as int,
     json['title'] as String,
