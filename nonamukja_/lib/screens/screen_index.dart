@@ -30,6 +30,12 @@ class _IndexScreenState extends State<IndexScreen> {
           )
         ]
       ),
+      floatingActionButton: _currentIndex == 0 ? FloatingActionButton( // 게시글 생성버튼
+        onPressed: () {
+          Navigator.of(context).pushNamed('/post_create');
+        },
+        child: Icon(Icons.add),
+      ) : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         iconSize: 30,

@@ -54,8 +54,10 @@ class HomeTab extends StatelessWidget {
                     arguments: PostScreenArguments(index: index),
                   );
                 },
+
               );
             },
+
           );
         }
       },
