@@ -12,7 +12,7 @@ class Post {
     return _instance;
   }
 
-  static List<PostModel> postModelList = new List.filled(1, PostModel.Initial()); // 게시글 Json정보를 저장할 변수
+  List<PostModel> postModelList =  new List.filled(1, PostModel.Initial()); // 게시글 Json정보를 저장할 변수
 
   int postCount = 0; // 개시글의 수를 저장하는 변수
 
@@ -25,7 +25,7 @@ class Post {
 
     List<dynamic> body = json.decode(response.body);
 
-    List<PostModel> postModelList =
+    postModelList =
     body.map((dynamic item) => PostModel.fromJson(item)).toList();
 
     print("[Post]postData 저장 성공!");
@@ -41,7 +41,7 @@ class Post {
     return postCount;
   }
 
-  GetPostData(int index) {
-    return postModelList[index];
+  GetPostData() {
+    return postModelList;
   }
 }
