@@ -15,8 +15,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
 
   void tokenVerifyCheck() async { // 토큰 유효성검사 후 로그인시도
-
-
     await Auth().tokenVerifyRequest().then((response) { // 저장된 토큰으로 로그인 시도
       if (response.statusCode ~/100 == 2) { // 상태코드 2XX > 로그인 성공
         Navigator.of(context).pushReplacementNamed('/index');
@@ -26,9 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }).catchError((error) {
       print('[screen_splash]에러발생.. 토큰 재발급 시도..');
+      tryTokenRefresh();
     });
+  }
 
-    // 토큰 재발급 시도
+  void tryTokenRefresh() async { // 토큰 재발급 시도
     await Auth().tokenRefreshRequest().then((response) { // 저장된 토큰으로 토큰재발급 시도
       if (response.statusCode ~/100 == 2) { // 상태코드 2XX > 재발급 성공
         Navigator.of(context).pushReplacementNamed('/index');

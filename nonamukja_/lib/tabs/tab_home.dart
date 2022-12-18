@@ -1,36 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:nonamukja/singleton_class/post.dart';
+import 'package:nonamukja/model/post_model.dart';
 
 class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Post().postListRequest(); // 게시글목록 가져오기
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      padding: const EdgeInsets.all(8),
-      itemCount: 30,
-      itemBuilder: (BuildContext, int index) {
-        return PostListTile(context, index);
-      },
-    );
-  }
+    return FutureBuilder(
+      future: Post().postListGetRequest(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData == false) {
+          return CircularProgressIndicator();
+        }
+        else if (snapshot.hasError) {
+          return Text("로딩에러!");
+        }
+        else {
+          print("PostData 로딩 성공!");
+          print(snapshot.data);
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.all(8),
+            itemCount: Post().postCount,
+            itemBuilder: (BuildContext, int index) {
+              var image;
+              try {
+                image = Image.network('http://think2022.iptime.org:9900' +
+                    snapshot.data[index].photo);
+              }
+              catch(e){
+                print(e);
+                image = Text("로딩에러");
+              }
+              return ListTile(
+                leading: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    alignment: Alignment.center,
+                    child: image,
+                  ),
+                ),
 
-  PostListTile(BuildContext context , int index) { // 게시글 리스트타이틀 위젯
-    return ListTile(
-      leading: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        child: Container(
-          width: 128,
-          height: 128,
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          alignment: Alignment.center,
-          child: CircleAvatar(),
-        ),
-      ),
-      title: const Text('맘스터치 먹을사람~'),
-      dense: false,
-      onTap: () {
-        Navigator.of(context).pushNamed('/post');
+                title: Text(snapshot.data[index].title),
+                dense: false,
+                onTap: () {
+                  Navigator.of(context).pushNamed('/post');
+                },
+              );
+            },
+          );
+        }
       },
     );
   }
