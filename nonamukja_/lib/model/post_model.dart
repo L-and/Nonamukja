@@ -10,12 +10,12 @@ class PostModel {
   late String photo;
   late String created_at;
   late String updated_at;
-  late int writer;
+  late Map<String, String> writer;
 
   PostModel(this.pk, this.title, this.content, this.photo, this.created_at, this.updated_at, this.writer);
 
   PostModel.Initial() {
-    pk=-1; title=""; content=""; photo=""; created_at=""; updated_at=""; writer=-1;
+    pk=-1; title=""; content=""; photo=""; created_at=""; updated_at=""; writer= Map();
   }
 
 
@@ -34,7 +34,8 @@ class PostModel {
           [Photo]:${photo}
           [Created At]:${created_at}
           [Updated At]:${updated_at}
-          [Writer]:${writer}
+          [Writer Eamil]:${writer['email']}
+          [Writer Nickname]:${writer['nickname']}
           """;
 
     return data;

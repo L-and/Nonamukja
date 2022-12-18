@@ -14,7 +14,9 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) {
     json['photo'] as String,
     json['created_at'] as String,
     json['updated_at'] as String,
-    json['writer'] as int,
+    (json['writer'] as Map<String, dynamic>).map(
+      (k, e) => MapEntry(k, e as String),
+    ),
   );
 }
 
