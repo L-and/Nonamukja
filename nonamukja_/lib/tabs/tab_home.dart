@@ -31,7 +31,7 @@ class HomeTab extends StatelessWidget {
               }
               catch(e){
                 print(e);
-                image = Text("로딩에러");
+                image = Image.network('http://think2022.iptime.org:9900/media/media/default.png/');
               }
               return ListTile(
                 leading: GestureDetector(
