@@ -48,7 +48,7 @@ class Auth {
     Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/token/verify/'); // 토큰 유효성검사 주소
 
     Map<String, String?> tokenJson = {
-      'token': prefs.getStringList('TokenList')?[0]
+      'token': prefs.getStringList('TokenList')?[1]
     };
 
     http.Response response = await http.post(
@@ -56,6 +56,8 @@ class Auth {
       body: tokenJson
     );
 
+
+    print(prefs.getStringList('TokenList'));
     return response;
   }
 
@@ -65,7 +67,7 @@ class Auth {
     Uri url = Uri.parse('http://think2022.iptime.org:9900/accounts/token/verify/'); // 토큰 재발급 주소
 
     Map<String, String?> tokenJson = {
-      'refresh': prefs.getStringList('TokenList')?[1]
+      'refresh': prefs.getStringList('TokenList')?[0]
     };
 
     http.Response response = await http.post(
