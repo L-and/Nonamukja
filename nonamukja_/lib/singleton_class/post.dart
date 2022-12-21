@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nonamukja/model/post_model.dart';
@@ -13,6 +15,8 @@ class Post {
   factory Post() {
     return _instance;
   }
+
+  var photo;
 
   List<PostModel> postModelList =  new List.filled(1, PostModel.Initial()); // 게시글 Json정보를 저장할 변수
 
@@ -37,29 +41,40 @@ class Post {
     return postModelList;
   }
 
-  Future<int> postPostRequest(title, content, talkLink, photo) async { // 헤더에 토큰을 담아 게스글을 작성하는 함수
+  Future<http.Response> postPostRequest(title, content, talkLink) async { // 헤더에 토큰을 담아 게스글을 작성하는 함수
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Uri url = Uri.parse('http://think2022.iptime.org:9900/nonamukja/post/');
-
-    Map<String, String> titleJson = {
-      'title': title ?? "",
-      'content': content ?? "",
-      'talk_link': talkLink ?? "",
-      'photo': photo,
-    };
 
     Map <String, String> tokenJson = {
       'token': prefs.getStringList('TokenList')?[1] ?? ""
     };
 
-    http.Response response = await http.post(
-        url,
-        headers: tokenJson,
-        body: titleJson
-    );
+    var request = new http.MultipartRequest("POST", url);
 
-    return response.statusCode;
+    String? token = prefs.getStringList('TokenList')?[1].toString() ?? "";
+
+    request.headers.addAll({
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    request.fields.addAll({
+      'title': title,
+      'content': content,
+      'talk_link': talkLink,
+    });
+
+    var stream = http.ByteStream(photo.openRead());
+    var length = await photo.length();
+
+    var multipartFile = await http.MultipartFile.fromPath('Image', photo.path);
+    request.files.add(multipartFile);
+
+    var streamResponse = await request.send();
+
+    var response = http.Response.fromStream(streamResponse);
+
+    return response;
   }
 
   GetPostDataLength() {

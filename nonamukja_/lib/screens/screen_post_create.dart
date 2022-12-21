@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:nonamukja/image_picker.dart';
 import 'package:nonamukja/singleton_class/post.dart';
@@ -63,17 +65,18 @@ class PostCreateScreen extends StatelessWidget {
           ElevatedButton(
             child: Text("완료"),
             onPressed: () {
-              print(imagePicker.GetImage());
-              // Future<int> statusCode = Post().postPostRequest(
-              //   _titleController.text,
-              //   _contentController.text,
-              //   _talkLinkController.text,
-              //   imagePicker.GetImage()
-              // );
-              //
-              // statusCode.then((val) {
-              //   print(val);
-              // });
+              Post().photo = imagePicker.GetImage();
+              Future<http.Response> statusCode = Post().postPostRequest(
+                _titleController.text,
+                _contentController.text,
+                _talkLinkController.text,
+              );
+
+              statusCode.then((val) {
+                print(val.statusCode);
+              }).catchError((error) {
+                print('[postCreater]'+error.toString());
+              });
             },
           ),
         ],
