@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:nonamukja/model/post_model.dart';
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Post {
   Post._privateConstructor();
 
@@ -33,6 +35,31 @@ class Post {
     postCount = postModelList.length;
 
     return postModelList;
+  }
+
+  Future<int> postPostRequest(title, content, talkLink, photo) async { // 헤더에 토큰을 담아 게스글을 작성하는 함수
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Uri url = Uri.parse('http://think2022.iptime.org:9900/nonamukja/post/');
+
+    Map<String, String> titleJson = {
+      'title': title ?? "",
+      'content': content ?? "",
+      'talk_link': talkLink ?? "",
+      'photo': photo,
+    };
+
+    Map <String, String> tokenJson = {
+      'token': prefs.getStringList('TokenList')?[1] ?? ""
+    };
+
+    http.Response response = await http.post(
+        url,
+        headers: tokenJson,
+        body: titleJson
+    );
+
+    return response.statusCode;
   }
 
   GetPostDataLength() {
