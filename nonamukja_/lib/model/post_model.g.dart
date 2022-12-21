@@ -7,11 +7,11 @@ part of 'post_model.dart';
 // **************************************************************************
 
 PostModel _$PostModelFromJson(Map<String, dynamic> json) {
-  if(json['photo'] == null) json['photo'] = "/media/default.png/";
   return PostModel(
     json['pk'] as int,
     json['title'] as String,
     json['content'] as String,
+    json['talk_link'] as String,
     json['photo'] as String,
     json['created_at'] as String,
     json['updated_at'] as String,
