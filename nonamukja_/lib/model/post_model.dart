@@ -1,8 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
-
 part 'post_model.g.dart';
 
-@JsonSerializable()
 class PostModel {
   late int pk;
   late String title;

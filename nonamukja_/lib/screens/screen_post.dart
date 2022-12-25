@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nonamukja/screens/screen_post_modify.dart';
 import 'package:nonamukja/singleton_class/post.dart';
+
+enum MenuItem {modification, delete}
 
 class PostScreenArguments {
   final int index;
@@ -14,13 +17,15 @@ class PostScreen extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as PostScreenArguments;
 
     return Scaffold(
-      body: PostScrollView(args.index),
+      body: PostScrollView(context, args.index),
     );
   }
 }
 
-Widget PostScrollView(int index) {
+Widget PostScrollView(context, int index) {
   Post post = Post(); // 포스트 불러오기
+
+  MenuItem? selectedMenu;
 
   return CustomScrollView(
     slivers: <Widget>[
@@ -36,6 +41,37 @@ Widget PostScrollView(int index) {
                 )),
           ],
         ),
+        actions: [
+          PopupMenuButton<MenuItem>(
+            initialValue: selectedMenu ,
+            // Callback that sets the selected popup menu item.
+            onSelected: (MenuItem item) {
+              if(item == MenuItem.modification) { // 수정
+                Navigator.pushNamed(
+                  context,
+                  '/post_modify',
+                  arguments: PostModifyScreenArguments(pk: post.postModelList[index].pk),
+                );
+
+              }
+              else if(item == MenuItem.delete) { // 삭제
+                Post().postDelete(post.postModelList[index].pk).then((value) => print(value));
+                post.postListGetRequest().then((value) => null);
+                Navigator.pop(context);
+              }
+            },
+            itemBuilder: (context) => <PopupMenuEntry<MenuItem>>[
+              const PopupMenuItem<MenuItem>(
+                value: MenuItem.modification,
+                child: Text('수정'),
+              ),
+              const PopupMenuItem<MenuItem>(
+                value: MenuItem.delete,
+                child: Text('삭제'),
+              ),
+            ],
+          )
+        ],
       ),
       SliverToBoxAdapter( // 게시글 본문
         child: Column(
@@ -43,15 +79,24 @@ Widget PostScrollView(int index) {
           children: [
             Text(post.postModelList[index].title,  // 제목
               style: TextStyle(
-                fontSize: 60,
+                fontSize: 40,
               ),
             ),
-            Text(post.postModelList[index].writer['nickname']!,  // 닉네임
+            Text("닉네임: "+post.postModelList[index].writer['nickname']!.toString(),  // 닉네임
               style: TextStyle(
                 fontSize: 25,
               ),
             ),
-            Text(post.postModelList[index].content,  // 내용
+            Divider(),
+            SizedBox(
+              height: 300,
+              child: Text(post.postModelList[index].content,  // 내용
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            Text(post.postModelList[index].talk_link,  // 톡 링크
               style: TextStyle(
                 fontSize: 25,
               ),

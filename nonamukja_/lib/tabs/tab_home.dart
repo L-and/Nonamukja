@@ -10,6 +10,11 @@ class HomeTab extends StatelessWidget {
     return FutureBuilder(
       future: post.postListGetRequest(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        print(snapshot.connectionState);
+        if (snapshot.connectionState != ConnectionState.done) {
+          post.postListGetRequest();
+        }
+
         if (snapshot.hasData == false) {
           return CircularProgressIndicator();
         }

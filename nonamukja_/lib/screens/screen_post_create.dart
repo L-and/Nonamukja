@@ -17,7 +17,7 @@ class PostCreateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PostCreateAppBar(),
-      body: PostCreateBody(),
+      body: PostCreateBody(context),
     );
   }
 
@@ -26,7 +26,7 @@ class PostCreateScreen extends StatelessWidget {
     );
   }
 
-  PostCreateBody() {
+  PostCreateBody(context) {
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.all(20),
@@ -74,6 +74,9 @@ class PostCreateScreen extends StatelessWidget {
 
               statusCode.then((val) {
                 print(val.statusCode);
+                if(val.statusCode ~/ 100 == 2) {
+                  Navigator.pop(context);
+                }
               }).catchError((error) {
                 print('[postCreater]'+error.toString());
               });
