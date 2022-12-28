@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nonamukja/screens/screen_post_modify.dart';
 import 'package:nonamukja/singleton_class/post.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 enum MenuItem {modification, delete}
+
+Post post = Post(); // 포스트 불러오기
 
 class PostScreenArguments {
   final int index;
@@ -18,18 +22,18 @@ class PostScreen extends StatelessWidget {
 
     return Scaffold(
       body: PostScrollView(context, args.index),
+      bottomNavigationBar: BottomBar(args.index),
     );
   }
 }
 
 Widget PostScrollView(context, int index) {
-  Post post = Post(); // 포스트 불러오기
-
   MenuItem? selectedMenu;
 
   return CustomScrollView(
     slivers: <Widget>[
       SliverAppBar( // 게시글 이미지
+        backgroundColor: Colors.white12,
         pinned: true,
         expandedHeight: 250.0,
         flexibleSpace: Stack(
@@ -37,7 +41,7 @@ Widget PostScrollView(context, int index) {
             Positioned.fill(
                 child: Image.network(
                   'http://think2022.iptime.org:9900' + post.postModelList[index].photo,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
                 )),
           ],
         ),
@@ -74,50 +78,65 @@ Widget PostScrollView(context, int index) {
         ],
       ),
       SliverToBoxAdapter( // 게시글 본문
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(post.postModelList[index].title,  // 제목
-              style: TextStyle(
-                fontSize: 40,
-              ),
-            ),
-            Text("닉네임: "+post.postModelList[index].writer['nickname']!.toString(),  // 닉네임
-              style: TextStyle(
-                fontSize: 25,
-              ),
-            ),
-            Divider(),
-            SizedBox(
-              height: 300,
-              child: Text(post.postModelList[index].content,  // 내용
-                style: TextStyle(
-                  fontSize: 20,
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(post.postModelList[index].title,  // 제목
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
                 ),
-              ),
+                Text("닉네임: "+post.postModelList[index].writer['nickname']!.toString(),  // 닉네임
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey,
+                  ),
+                ),
+                Divider(height: 30,color: Colors.black.withOpacity(0.5)),
+                SizedBox(
+                  height: 300,
+                  child: Text(post.postModelList[index].content,  // 내용
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Text(post.postModelList[index].talk_link,  // 톡 링크
-              style: TextStyle(
-                fontSize: 25,
-              ),
-            ),
-          ],
-        )
+          )
       ),
     ],
   );
 }
 
-Container BottomBar() {
+Container BottomBar(index) {
   return Container(
-    color: Colors.grey,
-    height: 50,
+    decoration: BoxDecoration(
+      border: Border(
+        top: BorderSide(
+          width: 1,
+          color: Colors.grey,
+        )
+      )
+    ),
+    height: 80,
     padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-    child: Row(
-      children: [
-        Container(),
-        Container(),
-      ],
+    child: Container(
+      margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        child: Text("채팅링크로 이동",
+        style: TextStyle(
+          fontSize: 20
+        ),
+        ),
+        onPressed: () async {
+          print(post.postModelList[index].talk_link);
+          await launchUrlString(post.postModelList[index].talk_link);
+        },
+      ),
     ),
   );
 }

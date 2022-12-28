@@ -12,7 +12,7 @@ class _IndexScreenState extends State<IndexScreen> {
   int _currentIndex = 0;
   final List<Widget> _tabs = [
     HomeTab(),
-    ChatTab(),
+    // ChatTab(),
     ProfileTab(),
   ];
 
@@ -60,7 +60,7 @@ class _IndexScreenState extends State<IndexScreen> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: '채팅'),
+          //BottomNavigationBarItem(icon: Icon(Icons.chat), label: '채팅'),
           BottomNavigationBarItem(icon: Icon(Icons.man), label: '내 정보'),
         ],
       ),

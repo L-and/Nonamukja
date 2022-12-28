@@ -67,7 +67,7 @@ class Post {
     var stream = http.ByteStream(photo.openRead());
     var length = await photo.length();
 
-    var multipartFile = await http.MultipartFile.fromPath('Image', photo.path);
+    var multipartFile = await http.MultipartFile.fromPath('photo', photo.path);
     request.files.add(multipartFile);
 
     var streamResponse = await request.send();
@@ -105,7 +105,7 @@ class Post {
       var stream = http.ByteStream(photo.openRead());
       var length = await photo.length();
 
-      var multipartFile = await http.MultipartFile.fromPath('Image', photo.path);
+      var multipartFile = await http.MultipartFile.fromPath('photo', photo.path);
       request.files.add(multipartFile);
     }
 

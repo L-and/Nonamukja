@@ -56,7 +56,20 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       appBar: null,
       body: Center(
-        child: Text('splash Screen'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('노나묵자',
+            style: TextStyle(
+              fontSize: 80,
+              fontFamily: 'OneMobilePOP',
+            ),
+          ),
+
+          CircularProgressIndicator(
+          ),
+        ],
+        )
       )
     );
   }

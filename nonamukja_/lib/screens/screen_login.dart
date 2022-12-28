@@ -28,6 +28,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text('노나묵자',
+                  style: TextStyle(
+                    fontSize: 80,
+                      fontFamily: 'OneMobilePOP'
+                  ),
+                ),
+                SizedBox(height: 100),
                 EmailTextFormField(), // 이메일 입력창
                 PasswordTextFormField(), // 비밀번호 입력창
                 renderSubmitButton(), // 로그인버튼
